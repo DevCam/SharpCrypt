@@ -20,6 +20,7 @@ namespace SharpCrypt
 
         private void encode_Click(object sender, EventArgs e)
         {
+
             if (keyInput.Text.Length < 1)
                 keyInput.Text = @"DefaultKey";
             var key = new Key(keyInput.Text);
