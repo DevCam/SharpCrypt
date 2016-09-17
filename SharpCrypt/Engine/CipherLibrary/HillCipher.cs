@@ -10,12 +10,32 @@ namespace SharpCrypt.Engine.CipherLibrary
     {
         public static string Encrypt(Key key, Alphabet alphabet, string plaintext)
         {
-            var k = key.GetHillKey(3);
+            var k = key.GetHillKey(3, 10);
             var m = plaintext;
-            var c = new StringBuilder();
 
+            return Operate(k, m);
+        }
+
+        public static string Decrypt(Key key, Alphabet alphabet, string encodtext)
+        {
+            int determinant;
+            Matrix cofactor;
+            var k = key.GetHillKey(3, 10, out determinant, out cofactor);
+            var m = encodtext;
+
+            //Find det inverse
+            var inverse = CryptoMath.Invert(determinant, alphabet.GetSize());
+
+            return Operate(k, m);
+        }
+
+        private static string Operate(Matrix key, string text)
+        {
+            var c = new StringBuilder();
 
             return c.ToString();
         }
+
+        
     }
 }
