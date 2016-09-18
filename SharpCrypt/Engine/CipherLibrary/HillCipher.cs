@@ -10,7 +10,7 @@ namespace SharpCrypt.Engine.CipherLibrary
     {
         public static string Encrypt(Key key, Alphabet alphabet, string plaintext)
         {
-            var k = key.GetHillKey(3, 10);
+            var k = key.GetHillKey();
             var m = plaintext;
 
             return Operate(k, m);
@@ -20,11 +20,15 @@ namespace SharpCrypt.Engine.CipherLibrary
         {
             int determinant;
             Matrix cofactor;
-            var k = key.GetHillKey(3, 10, out determinant, out cofactor);
+            var encoK = key.GetHillKey(out determinant, out cofactor);
             var m = encodtext;
 
             //Find det inverse
-            var inverse = CryptoMath.Invert(determinant, alphabet.GetSize());
+            determinant = CryptoMath.Mod(determinant, alphabet.GetSize() + 1);
+            var inverse = CryptoMath.Invert(determinant, alphabet.GetSize() + 1);
+
+            var k = (inverse*cofactor.Transpose())% (alphabet.GetSize() + 1);
+            //var lolz = ((k % (alphabet.GetSize() + 1)) * (encoK % (alphabet.GetSize() + 1))) % (alphabet.GetSize()+1);
 
             return Operate(k, m);
         }

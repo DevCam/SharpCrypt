@@ -21,12 +21,22 @@ namespace SharpCrypt.Engine.CipherLibrary
             const double epsilon = 0.0000001;
             for (var i = 0; i <= alphabetSize; i++)
             {
-                var y = ((alphabetSize*i) + 1)/determinant;
+                var y = ((alphabetSize*i) + 1)/(double)determinant;
                 if (y%1 < epsilon && y > 0 && y < alphabetSize)
-                    return y; //found the inverse
+                    return (int)y; //found the inverse
             }
 
             throw new Exception("Determinant does not have inverse over mod alphabet");
+        }
+        public static Matrix LowerTriangularCofactor(Matrix m)
+        {
+            var cof = new Matrix(m.Height, m.Width);
+
+            for(var i=0; i<m.Height;i++)
+                for (var j = 0; j <= i; j++)
+                    cof[i, j] = new Matrix(m, i, j).Determinant() * (int)Math.Pow(-1, i+j);
+
+            return cof;
         }
     }
 }

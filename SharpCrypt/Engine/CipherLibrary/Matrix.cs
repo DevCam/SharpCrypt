@@ -19,6 +19,30 @@ namespace SharpCrypt.Engine.CipherLibrary
             _core = new int[n,m];
         }
 
+        public Matrix(Matrix m, int dropRow, int dropCol)
+        {
+            //Build a matrix, minus row #dropRow and col #dropCol
+            //Consider n^2 complexity for this constructor
+            Height = m.Height - 1;
+            Width = m.Width - 1;
+            _core = new int[Height,Width];
+
+            for (int i = 0, j = 0; i < m.Height; i++)
+            {
+                if (i == dropRow)
+                    continue;
+                for (int k = 0, u = 0; k < m.Width; k++)
+                {
+                    if (k == dropCol)
+                        continue;
+                    this[j, u] = m[i, k];
+                    u++;
+                }
+                j++;
+            }
+
+        }
+
         public int this[int i, int j]
         {
             get { return _core[i, j]; } set { _core[i, j] = value; }
@@ -78,6 +102,28 @@ namespace SharpCrypt.Engine.CipherLibrary
                     res[j, i] = this[i, j];
 
             return res;
+        }
+
+        public int Determinant()
+        {
+            if(Width != Height)
+                throw new Exception("Matrix does not have determinant");
+            if (Width == 2)
+                return (this[0, 0]*this[1, 1]) - (this[0, 1]*this[1, 0]);
+            if (Width == 3)
+                return (this[0, 0]*this[1, 1]*this[2, 2])+(this[0,1]*this[1,2]*this[2,0])+(this[0,2]*this[1,0]*this[2,1])
+                    -(this[0,2]*this[1,1]*this[2,0]) - (this[0,1]*this[1,0]*this[2,2]) - (this[0,0]*this[1,2]*this[2,1]);
+            
+            //4x4 <= 
+            var det = 0;
+            for (var i = 0; i < Width; i++)
+            {
+                var tempNewM = new Matrix(this, 0, i);
+                det += this[0, i] * (tempNewM.Determinant() * (int)Math.Pow(-1, i));
+            }
+                
+            return det;
+
         }
     }
 }
