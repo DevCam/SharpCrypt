@@ -14,6 +14,9 @@ namespace SharpCrypt
 {
     public partial class SharpCrypt : Form
     {
+        private const int KEY_SIZE = 8;
+        private const int VAL_RANGE = 3;
+
         public SharpCrypt()
         {
             InitializeComponent();
@@ -23,10 +26,12 @@ namespace SharpCrypt
         {
             if (keyInput.Text.Length < 1)
                 keyInput.Text = @"DefaultKey";
-            var key = new Key(keyInput.Text, 8, 5);
+            var key = new Key(keyInput.Text, KEY_SIZE, VAL_RANGE);
             var alphabet = new Alphabet("abcdefghijklmnopqrstuvwxyz !ñ0123456789.");
 
-            var caesar = CaesarCipher.Encrypt(key, alphabet, input.Text);
+            var plaintext = input.Text;
+            plaintext = CleanText(plaintext, KEY_SIZE);
+            var caesar = CaesarCipher.Encrypt(key, alphabet, plaintext);
             var vigenere = VigenereCipher.Encrypt(key, alphabet, caesar);
             var hill = HillCipher.Encrypt(key, alphabet, vigenere);
 
@@ -37,14 +42,24 @@ namespace SharpCrypt
         {
             if (keyInput.Text.Length < 1)
                 keyInput.Text = @"DefaultKey";
-            var key = new Key(keyInput.Text, 8, 5);
+            var key = new Key(keyInput.Text, KEY_SIZE, VAL_RANGE);
             var alphabet = new Alphabet("abcdefghijklmnopqrstuvwxyz !ñ0123456789.");
 
-            var hill = HillCipher.Decrypt(key, alphabet, input.Text);
+            var codedtext = input.Text;
+            var hill = HillCipher.Decrypt(key, alphabet, codedtext);
             var vigenere = VigenereCipher.Decrypt(key, alphabet, hill);
             var caesar = CaesarCipher.Decrypt(key, alphabet, vigenere);
 
             output.Text = caesar;
+        }
+
+        private static string CleanText(string dirtyText, int kSize)
+        {
+            var builder = new StringBuilder(dirtyText);
+            while (builder.Length%kSize != 0)
+                builder.Append(" ");
+
+            return builder.ToString();
         }
     }
 }

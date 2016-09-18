@@ -19,6 +19,17 @@ namespace SharpCrypt.Engine.CipherLibrary
             _core = new int[n,m];
         }
 
+        public Matrix(int n, int m, IReadOnlyList<int> content)
+        {
+            Height = n;
+            Width = m;
+            _core = new int[n,m];
+            var counter = 0;
+            for(var i=0; i < Height; i++)
+                for (var j = 0; j < Width; j++)
+                    _core[i, j] = content[counter++];
+        }
+
         public Matrix(Matrix m, int dropRow, int dropCol)
         {
             //Build a matrix, minus row #dropRow and col #dropCol
@@ -84,9 +95,9 @@ namespace SharpCrypt.Engine.CipherLibrary
         public static Matrix operator %(Matrix m, int mod)
         {
             //Consider n^2 complexity
-            var res = new Matrix(m.Width, m.Height);
-            for(var i =0; i < m.Width;i++)
-                for (var j = 0; j < m.Height;j++)
+            var res = new Matrix(m.Height, m.Width);
+            for (var i = 0; i < m.Height; i++)
+                for (var j = 0; j < m.Width;j++)
                     res[i, j] = CryptoMath.Mod(m[i, j], mod);
 
             return res;
