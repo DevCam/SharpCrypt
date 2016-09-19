@@ -15,7 +15,7 @@ namespace SharpCrypt
     public partial class SharpCrypt : Form
     {
         private const int KEY_SIZE = 8;
-        private const int VAL_RANGE = 3;
+        private const int VAL_RANGE = 5;
 
         public SharpCrypt()
         {
@@ -60,6 +60,13 @@ namespace SharpCrypt
                 builder.Append(" ");
 
             return builder.ToString();
+        }
+
+        private void clear_Click(object sender, EventArgs e)
+        {
+            input.Text = "";
+            output.Text = "";
+            keyInput.Text = "";
         }
     }
 }
