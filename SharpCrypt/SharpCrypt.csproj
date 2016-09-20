@@ -47,9 +47,9 @@
     <Compile Include="Engine\Alphabet.cs" />
     <Compile Include="Engine\AlphabetError.cs" />
     <Compile Include="Engine\CipherLibrary\CaesarCipher.cs" />
-    <Compile Include="Engine\CipherLibrary\CryptoMath.cs" />
+    <Compile Include="Engine\CryptoMath.cs" />
     <Compile Include="Engine\CipherLibrary\HillCipher.cs" />
-    <Compile Include="Engine\CipherLibrary\Matrix.cs" />
+    <Compile Include="Engine\Matrix.cs" />
     <Compile Include="Engine\Key.cs" />
     <Compile Include="Engine\CipherLibrary\VigenereCipher.cs" />
     <Compile Include="Main.cs">
